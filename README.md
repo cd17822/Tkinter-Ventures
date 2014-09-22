@@ -11,7 +11,7 @@ Level-saving and high score-saving made possible with File I/O methods.
 2048 with AI - May, 2014	
 A fully functional replica of the popular “2048” game that can be played using the arrow keys.
 Includes a heuristic artificial intelligence with the ability to solve the board any time the user tells it to.
-Commented out a segment of code able to run multiple simulations of the AI to gather statistics on success rates.
+The base tile is not hard-coded (can be changed to a number other than 2).
 
 Thank you for your interest, 	
 Charles DiGiovanna
