@@ -184,7 +184,7 @@ def goUp():
         mergeUp()
         moveUp() #you still need it to move up just in case its possible after a merge
         newTile()
-        ##print "UP"
+        #print "UP"
 
 def goLeft():
     if checkLeftMove()== True or checkMergeLeft()== True:
@@ -193,7 +193,7 @@ def goLeft():
         mergeLeft()
         moveLeft()
         newTile()
-        ##print "LEFT"
+        #print "LEFT"
         
 def goDown():
     if checkDownMove()== True or checkMergeDown()== True:
@@ -202,7 +202,7 @@ def goDown():
         mergeDown()
         moveDown()
         newTile()
-        ##print "DOWN"
+        #print "DOWN"
 
 def goRight():
     if checkRightMove()== True or checkMergeRight()== True:
@@ -211,7 +211,7 @@ def goRight():
         mergeRight()
         moveRight()
         newTile()
-        ##print "RIGHT"
+        #print "RIGHT"
 
 def keyPressed(canvas,event):
     if (event.keysym == "Up"):
@@ -239,14 +239,14 @@ def redrawAll():
     else:
         canvas.delete(ALL)
         drawBoard()
-    ##printBoardToConsole()
+    #printBoardToConsole()
 
-#def printBoardToConsole():
-    ##print canvas.data.board[0]
-    ##print canvas.data.board[1]
-    ##print canvas.data.board[2]
-    ##print canvas.data.board[3]
-    ##print
+def printBoardToConsole():
+    print canvas.data.board[0]
+    print canvas.data.board[1]
+    print canvas.data.board[2]
+    print canvas.data.board[3]
+    print
 
 def drawTile(canvas, tileNumber, row, col):
     if tileNumber<=canvas.data.base:
@@ -328,14 +328,6 @@ def timerFired():
         ai()
     if canvas.data.gameOverCheck==False:
         canvas.after(canvas.data.delay, timerFired)
-
-#def newTileAnimation():
-    #if canvas.data.timerCounter<21:
-        #canvas.create_rectangle(50-canvas.data.timerCounter*2,
-                                #50-canvas.data.timerCounter*2,
-                                #50+canvas.data.timerCounter*2,
-                                #50+canvas.data.timerCounter*2,
-                                #fill="orange")
 
 def rightColumnFullCheck():
     if (canvas.data.board[0][3]!=0 and 
@@ -736,20 +728,17 @@ def __init__():
                        [0,0,0,0],
                        [0,0,0,0],
                        [0,0,0,0]]
-    '''canvas.data.board=[[128,256,512,1024],
-                                   [64,32,16,8],
-                                   [0,2,2,4],
-                                   [0,0,0,0]]'''
     canvas.data.hypoBoard=copy.deepcopy(canvas.data.board)
     canvas.data.score=0
     canvas.data.gameOverCheck=False
     canvas.data.lastMove="none"
-    canvas.data.delay=10
+    canvas.data.delay=10 #Higher value -> slower ai moves
     newTile()
     newTile()
     redrawAll()
 
 def run():
+    #This function is taken from lecture notes created by Prof David Kosbie (CMU)
     # create the root and the canvas
     global canvas
     root = Tk()
@@ -759,14 +748,9 @@ def run():
     class Struct: pass
     canvas.data = Struct()
     __init__()
-    #aiLoop() <-do moves then show board
-    #timerFired() # <- comment out this line to play (uncommented->AI)
-    #newTileAnimation()
     # set up events
     root.bind("<Key>", lambda event: keyPressed(canvas,event))
     # and launch the app
     root.mainloop()
 
 run()
-
-#my high score: 70660
