@@ -13,5 +13,5 @@ A fully functional replica of the popular “2048” game that can be played usi
 Includes a heuristic artificial intelligence with the ability to solve the board any time the user tells it to.
 Also, the base tile is not hard-coded (can be changed to a number other than 2).
 
-Thank you for your interest, 	
+Thank you for your interest,        
 Charles DiGiovanna
