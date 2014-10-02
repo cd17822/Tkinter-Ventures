@@ -1,4 +1,4 @@
-Tkinter-Projects
+Tkinter-Ventures
 ====================
 
 The following two projects are both games written in Python using the Tkinter importation for graphics.
