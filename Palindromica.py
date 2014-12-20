@@ -440,7 +440,7 @@ class Time(Palindromica):
         self.fill="dark grey"
 
     def draw(self,canvas,width,height,timerCounter):
-        if (self.gameTotalTime-timerCounter)/100>10:
+        if (self.gameTotalTime-timerCounter)/100>=10:
             canvas.create_text(width/7*6,height/15,
                 text="Time: "+str((self.gameTotalTime-timerCounter)/100),fill=self.fill,font=("Helvetica",32))
             canvas.create_text(width/6.46*6,height/15,
