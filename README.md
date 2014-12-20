@@ -3,7 +3,7 @@ Tkinter-Ventures
 
 The following three projects are both games written in Python using the Tkinter importation for graphics.
 
-Palindromica - November 2014
+Palindromica - November 2014 
 An original game where a user is to expose palindromes from a string of digits.
 Digits or spaces can be clicked on order to expose an odd/even palindrome whose length is auto-detected.
 Includes an elegant, simplistic design and instructions screen.
