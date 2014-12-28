@@ -5,8 +5,8 @@ The following three projects are both games written in Python using the Tkinter 
 
 Palindromica - November 2014	
 An original game where a user is to expose palindromes from a string of digits.
-Digits or spaces can be clicked on order to expose an odd/even palindrome whose length is auto-detected.
-Includes an elegant, simplistic design and instructions screen.
+Digits or spaces can be clicked in order to expose an odd/even palindrome whose length is auto-detected.
+Includes an elegant, simplistic user interface with a detailed instruction screen.
 
 Bonkers - July 2014	 
 An original game where a user creates barriers to deflect a ball away from black holes and into a goal.
