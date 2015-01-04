@@ -1,7 +1,7 @@
 Tkinter-Ventures
 ====================
 
-The following three projects are both games written in Python using the Tkinter importation for graphics.
+The following three projects are games written in Python using the Tkinter importation for graphics.
 
 Palindromica - November 2014	
 An original game where a user is to expose palindromes from a string of digits.
