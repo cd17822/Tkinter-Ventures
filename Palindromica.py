@@ -143,7 +143,7 @@ class Palindromica(Animation):
 
     def drawMenu(self):
         activefill="dark green"
-        self.canvas.create_text(self.width-110,self.height-14,text="Charles DiGiovanna",fill="dark grey",
+        self.canvas.create_text(self.width-110,self.height-14,text="Charlie DiGiovanna",fill="dark grey",
                                 activefill=activefill,font=("Helvetica",24))
         self.canvas.create_text(self.width/2,self.height/5,text="what's this?",
                                 font=("Helvetica",64),fill="grey",activefill=activefill)
@@ -176,7 +176,7 @@ class Palindromica(Animation):
         self.canvas.create_rectangle(-5,-5,self.width+5,self.height+5,fill=self.backgroundColor)
 
     def drawCharlie(self):
-        self.canvas.create_text(self.width/2,self.height/5,text="Charles DiGiovanna",font=("Helvetica",96),
+        self.canvas.create_text(self.width/2,self.height/5,text="Charlie DiGiovanna",font=("Helvetica",96),
             fill="dark grey")
         self.canvas.create_text(self.width/2,self.height/2-20,text="Binghamton University",font=("Helvetica",72),
             fill="dark grey")

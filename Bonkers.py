@@ -375,7 +375,7 @@ class Bonkers(Animation):
     def drawMenuScreen(self):
         self.canvas.create_rectangle(-1,-1,self.width+50,
             self.height+50,fill="lavender") #lavender background
-        self.canvas.create_text(self.width-80,20,text="Charles DiGiovanna",
+        self.canvas.create_text(self.width-80,20,text="Charlie DiGiovanna",
             font=("Verdana",13,"bold"))
         for i in xrange(29):
             self.canvas.create_oval(i*21,i*21,i*22,i*22,fill="white")
