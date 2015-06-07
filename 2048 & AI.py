@@ -1,8 +1,166 @@
-#2048
+#2048 & AI
 
 from Tkinter import *
 import random
 import copy
+
+def run():
+    #This function is taken from lecture notes created by Prof David Kosbie (CMU)
+    # create the root and the canvas
+    global canvas
+    root = Tk()
+    canvas = Canvas(root, width=405, height=500) #Make height 600 to see the moves that are going on in the AI
+    canvas.pack()
+    # Set up canvas data and call init
+    class Struct: pass
+    canvas.data = Struct()
+    __init__()
+    # set up events
+    root.bind("<Key>", lambda event: keyPressed(canvas,event))
+    # and launch the app
+    root.mainloop()
+
+def __init__():
+    canvas.data.base=2
+    canvas.data.timerCounter=0
+    canvas.data.board=[[0,0,0,0],
+                       [0,0,0,0],
+                       [0,0,0,0],
+                       [0,0,0,0]]
+    canvas.data.hypoBoard=copy.deepcopy(canvas.data.board)
+    canvas.data.score=0
+    canvas.data.gameOverCheck=False
+    canvas.data.lastMove="none"
+    canvas.data.delay=1 #Higher value -> slower ai moves
+    canvas.data.ai = False
+    newTile()
+    newTile()
+    redrawAll()
+
+def redrawAll():
+    if (checkUpMove()== False and checkMergeUp()== False and 
+    checkLeftMove()== False and checkMergeLeft()== False and 
+    checkDownMove()== False and checkMergeDown()== False and 
+    checkRightMove()== False and checkMergeRight()== False):
+        drawBoard()
+        gameOver()
+        canvas.data.gameOverCheck=True
+    else:
+        canvas.delete(ALL)
+        drawBoard()
+    #printBoardToConsole()
+
+def timerFired():
+    canvas.data.timerCounter+=1
+    canvas.delete(ALL)
+    redrawAll()
+    if canvas.data.timerCounter>1:
+        ai()
+    if canvas.data.gameOverCheck==False:
+        canvas.after(canvas.data.delay, timerFired)
+
+def keyPressed(canvas,event):
+    if (event.keysym == "Up"):
+        goUp()
+    if (event.keysym == "Left"):
+        goLeft()
+    if (event.keysym == "Down"):
+        goDown()
+    if (event.keysym == "Right"):
+        goRight()
+    if (event.keysym == "n"):
+        __init__()
+    if (event.keysym == "a" and canvas.data.ai == False):
+        timerFired()
+        canvas.data.ai = True
+    redrawAll()
+
+def newTile():
+    found = False
+    for i in xrange(10000):
+        if found == False:
+            canvas.data.possRow = random.randint(0,3)
+            canvas.data.possCol = random.randint(0,3)
+            if canvas.data.board[canvas.data.possRow][canvas.data.possCol] == 0:
+                twoOrFour=random.randint(1,6)
+                if twoOrFour==6:
+                    canvas.data.board[canvas.data.possRow][canvas.data.possCol] = canvas.data.base*2
+                    #newTileAnimation()
+                    found=True
+                elif twoOrFour>0 and twoOrFour<6:
+                    canvas.data.board[canvas.data.possRow][canvas.data.possCol] = canvas.data.base
+                    #newTileAnimation()
+                    found=True
+                else:
+                    canvas.data.gameOverCheck=True
+
+def drawTile(canvas, tileNumber, row, col):
+    if tileNumber<=canvas.data.base:
+        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="white")
+    elif tileNumber<=canvas.data.base*2:
+        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="dark grey")
+    elif tileNumber<=canvas.data.base*2**2:
+        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="magenta")
+    elif tileNumber<=canvas.data.base*2**3:
+        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="orange")
+    elif tileNumber<=canvas.data.base*2**4:
+        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="pink")
+    elif tileNumber<=canvas.data.base*2**5:
+        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="red")
+    elif tileNumber<=canvas.data.base*2**6:
+        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="black")
+    elif tileNumber<=canvas.data.base*2**7:
+        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="blue")
+    elif tileNumber<=canvas.data.base*2**8:
+        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="purple")
+    elif tileNumber<=canvas.data.base*2**9:
+        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="maroon")
+    elif tileNumber<=canvas.data.base*2**10:
+        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="gold")
+    elif tileNumber<=canvas.data.base*2**11:
+        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="cyan")
+    elif tileNumber<=canvas.data.base*2**12:
+        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="chartreuse")
+    elif tileNumber>canvas.data.base*2**12:
+        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="white")
+    if tileNumber<canvas.data.base*2:
+        canvas.create_text(55+col*100,150+row*100,text=canvas.data.tileNumber,font=("Helvetica",60),fill="black")
+    elif tileNumber<canvas.data.base*2**6:
+        canvas.create_text(55+col*100,150+row*100,text=canvas.data.tileNumber,font=("Helvetica",60),fill="white")
+    elif tileNumber<canvas.data.base*2**9:
+        canvas.create_text(55+col*100,150+row*100,text=canvas.data.tileNumber,font=("Helvetica",50),fill="white")
+    elif tileNumber<canvas.data.base*2**10:
+        canvas.create_text(55+col*100,150+row*100,text=canvas.data.tileNumber,font=("Helvetica",40),fill="white")
+    elif tileNumber==canvas.data.base*2**10:
+        canvas.create_text(55+col*100,150+row*100,text=canvas.data.tileNumber,font=("Helvetica",40),fill="black")
+    elif tileNumber<canvas.data.base*2**13:
+        canvas.create_text(55+col*100,150+row*100,text=canvas.data.tileNumber,font=("Helvetica",40),fill="white")
+    else:
+        canvas.create_text(55+col*100,150+row*100,text=canvas.data.tileNumber,font=("Helvetica",33),fill="white")
+
+def drawBoard():
+    largestTile=canvas.data.base
+    for c in xrange(4):
+        for d in xrange(4):
+            if canvas.data.board[c][d]>largestTile:
+                largestTile=canvas.data.board[c][d]
+    if largestTile<canvas.data.base*2**10:
+        canvas.create_rectangle(5,5,203,95,fill="orange")
+        canvas.create_text(102,53,text=str(canvas.data.base*2**10),font=("Helvetica",64),fill="white")
+        canvas.create_text(100,88,text='''(Press "A" to activate AI)''',font=("Helvetiva",10),fill="white")
+    else:
+        canvas.create_rectangle(5,5,203,95,fill="gold")
+        canvas.create_text(102,53,text=canvas.data.base*2**10,font=("Helvetica",64))
+        canvas.create_text(100,88,text='''(Press "A" to activate AI)''',font=("Helvetiva",10),fill="black")
+    canvas.create_rectangle(206,5,405,95,fill="beige")
+    canvas.create_text(305,30,text="Score:",font=("Helvetica",28))
+    canvas.create_text(305,68,text=canvas.data.score,font=("Helvetica",50))
+    for a in xrange(4):
+        for b in xrange(4):
+            canvas.create_rectangle(5+a*100,100+b*100,5+a*100+100,b*100+200)
+            if canvas.data.board[a][b]!=0:
+                canvas.data.tileNumber=canvas.data.board[a][b]
+                drawTile(canvas, canvas.data.tileNumber, a, b)
 
 def checkUpMove():
     board=canvas.data.board
@@ -158,25 +316,6 @@ def mergeLeft():
                 board[a][b]=0
                 canvas.data.score+=board[a][b-1]
 
-def newTile():
-    found = False
-    for i in xrange(10000):
-        if found == False:
-            canvas.data.possRow = random.randint(0,3)
-            canvas.data.possCol = random.randint(0,3)
-            if canvas.data.board[canvas.data.possRow][canvas.data.possCol] == 0:
-                twoOrFour=random.randint(1,6)
-                if twoOrFour==6:
-                    canvas.data.board[canvas.data.possRow][canvas.data.possCol] = canvas.data.base*2
-                    #newTileAnimation()
-                    found=True
-                elif twoOrFour>0 and twoOrFour<6:
-                    canvas.data.board[canvas.data.possRow][canvas.data.possCol] = canvas.data.base
-                    #newTileAnimation()
-                    found=True
-                else:
-                    canvas.data.gameOverCheck=True
-
 def goUp():
     if checkUpMove()== True or checkMergeUp()== True:
         canvas.data.lastMove="up"
@@ -213,34 +352,6 @@ def goRight():
         newTile()
         #print "RIGHT"
 
-def keyPressed(canvas,event):
-    if (event.keysym == "Up"):
-        goUp()
-    if (event.keysym == "Left"):
-        goLeft()
-    if (event.keysym == "Down"):
-        goDown()
-    if (event.keysym == "Right"):
-        goRight()
-    if (event.keysym == "n"):
-        __init__()
-    if (event.keysym == "a"):
-        timerFired()
-    redrawAll()
-
-def redrawAll():
-    if (checkUpMove()== False and checkMergeUp()== False and 
-    checkLeftMove()== False and checkMergeLeft()== False and 
-    checkDownMove()== False and checkMergeDown()== False and 
-    checkRightMove()== False and checkMergeRight()== False):
-        drawBoard()
-        gameOver()
-        canvas.data.gameOverCheck=True
-    else:
-        canvas.delete(ALL)
-        drawBoard()
-    #printBoardToConsole()
-
 def printBoardToConsole():
     print canvas.data.board[0]
     print canvas.data.board[1]
@@ -248,87 +359,11 @@ def printBoardToConsole():
     print canvas.data.board[3]
     print
 
-def drawTile(canvas, tileNumber, row, col):
-    if tileNumber<=canvas.data.base:
-        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="white")
-    elif tileNumber<=canvas.data.base*2:
-        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="dark grey")
-    elif tileNumber<=canvas.data.base*2**2:
-        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="magenta")
-    elif tileNumber<=canvas.data.base*2**3:
-        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="orange")
-    elif tileNumber<=canvas.data.base*2**4:
-        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="pink")
-    elif tileNumber<=canvas.data.base*2**5:
-        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="red")
-    elif tileNumber<=canvas.data.base*2**6:
-        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="black")
-    elif tileNumber<=canvas.data.base*2**7:
-        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="blue")
-    elif tileNumber<=canvas.data.base*2**8:
-        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="purple")
-    elif tileNumber<=canvas.data.base*2**9:
-        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="maroon")
-    elif tileNumber<=canvas.data.base*2**10:
-        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="gold")
-    elif tileNumber<=canvas.data.base*2**11:
-        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="cyan")
-    elif tileNumber<=canvas.data.base*2**12:
-        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="chartreuse")
-    elif tileNumber>canvas.data.base*2**12:
-        canvas.create_rectangle(8+col*100,103+row*100,2+col*100+100,197+row*100,fill="white")
-    if tileNumber<canvas.data.base*2:
-        canvas.create_text(55+col*100,150+row*100,text=canvas.data.tileNumber,font=("Helvetica",60),fill="black")
-    elif tileNumber<canvas.data.base*2**6:
-        canvas.create_text(55+col*100,150+row*100,text=canvas.data.tileNumber,font=("Helvetica",60),fill="white")
-    elif tileNumber<canvas.data.base*2**9:
-        canvas.create_text(55+col*100,150+row*100,text=canvas.data.tileNumber,font=("Helvetica",50),fill="white")
-    elif tileNumber<canvas.data.base*2**10:
-        canvas.create_text(55+col*100,150+row*100,text=canvas.data.tileNumber,font=("Helvetica",40),fill="white")
-    elif tileNumber==canvas.data.base*2**10:
-        canvas.create_text(55+col*100,150+row*100,text=canvas.data.tileNumber,font=("Helvetica",40),fill="black")
-    elif tileNumber<canvas.data.base*2**13:
-        canvas.create_text(55+col*100,150+row*100,text=canvas.data.tileNumber,font=("Helvetica",40),fill="white")
-    else:
-        canvas.create_text(55+col*100,150+row*100,text=canvas.data.tileNumber,font=("Helvetica",33),fill="white")
-
-def drawBoard():
-    largestTile=canvas.data.base
-    for c in xrange(4):
-        for d in xrange(4):
-            if canvas.data.board[c][d]>largestTile:
-                largestTile=canvas.data.board[c][d]
-    if largestTile<canvas.data.base*2**10:
-        canvas.create_rectangle(5,5,203,95,fill="orange")
-        canvas.create_text(102,53,text=str(canvas.data.base*2**10),font=("Helvetica",64),fill="white")
-        canvas.create_text(100,88,text='''(Press "A" to activate AI)''',font=("Helvetiva",10),fill="white")
-    else:
-        canvas.create_rectangle(5,5,203,95,fill="gold")
-        canvas.create_text(102,53,text=canvas.data.base*2**10,font=("Helvetica",64))
-        canvas.create_text(100,88,text='''(Press "A" to activate AI)''',font=("Helvetiva",10),fill="black")
-    canvas.create_rectangle(206,5,405,95,fill="beige")
-    canvas.create_text(305,30,text="Score:",font=("Helvetica",28))
-    canvas.create_text(305,68,text=canvas.data.score,font=("Helvetica",50))
-    for a in xrange(4):
-        for b in xrange(4):
-            canvas.create_rectangle(5+a*100,100+b*100,5+a*100+100,b*100+200)
-            if canvas.data.board[a][b]!=0:
-                canvas.data.tileNumber=canvas.data.board[a][b]
-                drawTile(canvas, canvas.data.tileNumber, a, b)
-
 def gameOver():
     canvas.create_rectangle(1,260,420,317,fill="red")
     canvas.create_text(205,290,text="GAME OVER", font=("Helvetica",65),fill="yellow")
 
-def timerFired():
-    canvas.data.timerCounter+=1
-    canvas.delete(ALL)
-    redrawAll()
-    if canvas.data.timerCounter>1:
-        ai()
-    if canvas.data.gameOverCheck==False:
-        canvas.after(canvas.data.delay, timerFired)
-
+#functions for AI from here down
 def rightColumnFullCheck():
     if (canvas.data.board[0][3]!=0 and 
         canvas.data.board[1][3]!=0 and 
@@ -720,37 +755,5 @@ def ai():
 def aiLoop():
     while canvas.data.gameOverCheck==False:
         ai()
-
-def __init__():
-    canvas.data.base=2
-    canvas.data.timerCounter=0
-    canvas.data.board=[[0,0,0,0],
-                       [0,0,0,0],
-                       [0,0,0,0],
-                       [0,0,0,0]]
-    canvas.data.hypoBoard=copy.deepcopy(canvas.data.board)
-    canvas.data.score=0
-    canvas.data.gameOverCheck=False
-    canvas.data.lastMove="none"
-    canvas.data.delay=10 #Higher value -> slower ai moves
-    newTile()
-    newTile()
-    redrawAll()
-
-def run():
-    #This function is taken from lecture notes created by Prof David Kosbie (CMU)
-    # create the root and the canvas
-    global canvas
-    root = Tk()
-    canvas = Canvas(root, width=405, height=500) #Make height 600 to see the moves that are going on in the AI
-    canvas.pack()
-    # Set up canvas data and call init
-    class Struct: pass
-    canvas.data = Struct()
-    __init__()
-    # set up events
-    root.bind("<Key>", lambda event: keyPressed(canvas,event))
-    # and launch the app
-    root.mainloop()
 
 run()
