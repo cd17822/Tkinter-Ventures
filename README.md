@@ -19,4 +19,4 @@ Includes a heuristic artificial intelligence with the ability to solve the board
 A base tile which is not hard-coded so that it can be changed to a number other than the default, 2.
 
 Thank you for your interest,        
-Charles DiGiovanna
+Charlie DiGiovanna
