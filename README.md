@@ -17,6 +17,3 @@ Level-saving and high score-saving made possible with File I/O methods.
 A fully functional replica of the popular “2048” game that can be played using the arrow keys.
 Includes a heuristic artificial intelligence with the ability to solve the board any time the user tells it to.
 A base tile which is not hard-coded so that it can be changed to a number other than the default, 2.
-
-Thank you for your interest,        
-Charlie DiGiovanna
